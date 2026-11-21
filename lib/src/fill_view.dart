@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:studio_core/core/strings.dart';
 import 'package:studio_core/app/game_api.dart';
 import 'package:studio_core/app/services/audio.dart';
 import 'package:studio_core/core/game_rules.dart';
@@ -30,7 +31,6 @@ class _FillViewState extends State<FillView> {
   bool _ended = false;
 
   PlayContext get ctx => widget.ctx;
-  bool get _tr => ctx.lang == 'tr';
 
   @override
   void initState() {
@@ -246,7 +246,7 @@ class _FillViewState extends State<FillView> {
       child: Row(children: [
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(_tr ? 'Şekli doldur: $done / $total' : 'Fill the shape: $done / $total',
+            Text(Strings.tx(ctx.lang, 'Şekli doldur: {0} / {1}', 'Fill the shape: {0} / {1}', [done, total]),
                 style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
             LinearProgressIndicator(value: total == 0 ? 0 : done / total),
@@ -331,9 +331,9 @@ class _FillViewState extends State<FillView> {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         b(Icons.lightbulb, ctx.t('hint'), _useHint),
         b(Icons.undo, ctx.t('undo'), game.canUndo ? _undo : null),
-        b(Icons.rotate_right, _tr ? 'Döndür' : 'Rotate',
+        b(Icons.rotate_right, Strings.tx(ctx.lang, 'Döndür', 'Rotate'),
             _selected == null ? null : () => setState(() => game.rotate(_selected!))),
-        b(Icons.restart_alt, _tr ? 'Hepsini geri al' : 'Take all back', game.filledCells == 0 ? null : _reset),
+        b(Icons.restart_alt, Strings.tx(ctx.lang, 'Hepsini geri al', 'Take all back'), game.filledCells == 0 ? null : _reset),
       ]),
     );
   }
