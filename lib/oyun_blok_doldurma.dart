@@ -10,6 +10,7 @@ import 'src/fill_view.dart';
 
 export 'src/fill_engine.dart';
 export 'src/fill_rules.dart';
+export 'src/fill_view.dart';
 
 final blokDoldurmaConfig = GameConfig(
   gameId: blokDoldurmaId,
