@@ -133,7 +133,15 @@ class _FillViewState extends State<FillView> {
     if (cell == null) return;
     final sel = _selected;
     if (sel != null && game.placed[sel] == null) {
-      _place(sel, cell.$1, cell.$2);
+      // The tapped cell may be any cell of the piece (works at the edges too).
+      var at = (cell.$1, cell.$2);
+      for (final c in game.pieces[sel].cells) {
+        if (game.canPlace(sel, cell.$1 - c[0], cell.$2 - c[1])) {
+          at = (cell.$1 - c[0], cell.$2 - c[1]);
+          break;
+        }
+      }
+      _place(sel, at.$1, at.$2);
       return;
     }
     // Tap on a placed piece takes it back to the tray.
@@ -156,7 +164,16 @@ class _FillViewState extends State<FillView> {
       return DragTarget<int>(
         onMove: (d) {
           final p = game.pieces[d.data];
-          final c = _cellAt(d.offset + _feedbackShift(p, cell), round: true);
+          var c = _cellAt(d.offset + _feedbackShift(p, cell), round: true);
+          // Snap to the nearest fitting position within one cell.
+          if (c != null && !game.canPlace(d.data, c.$1, c.$2)) {
+            for (final o in const [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]) {
+              if (game.canPlace(d.data, c.$1 + o.$1, c.$2 + o.$2)) {
+                c = (c.$1 + o.$1, c.$2 + o.$2);
+                break;
+              }
+            }
+          }
           setState(() {
             _hoverTray = d.data;
             _hoverX = c?.$1;
