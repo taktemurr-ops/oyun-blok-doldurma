@@ -166,10 +166,11 @@ class _FillViewState extends State<FillView> {
           final p = game.pieces[d.data];
           var c = _cellAt(d.offset + _feedbackShift(p, cell), round: true);
           // Snap to the nearest fitting position within one cell.
-          if (c != null && !game.canPlace(d.data, c.$1, c.$2)) {
+          final base = c;
+          if (base != null && !game.canPlace(d.data, base.$1, base.$2)) {
             for (final o in const [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]) {
-              if (game.canPlace(d.data, c.$1 + o.$1, c.$2 + o.$2)) {
-                c = (c.$1 + o.$1, c.$2 + o.$2);
+              if (game.canPlace(d.data, base.$1 + o.$1, base.$2 + o.$2)) {
+                c = (base.$1 + o.$1, base.$2 + o.$2);
                 break;
               }
             }
