@@ -81,7 +81,7 @@ final blokDoldurmaConfig = GameConfig(
       'Lấp đầy hình bằng mọi mảnh!',
       'Punuin ang hugis gamit ang lahat ng piraso!',
     ],
-  seedColor: const Color(0xFF8E24AA),
+  seedColor: const Color(0xFF2F8F83),
   icon: Icons.extension_rounded,
   rules: FillRules(),
   buildPlay: (ctx) => FillView(ctx: ctx),
