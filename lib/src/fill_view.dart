@@ -5,9 +5,12 @@ import 'package:studio_core/core/strings.dart';
 import 'package:studio_core/app/game_api.dart';
 import 'package:studio_core/app/services/audio.dart';
 import 'package:studio_core/core/game_rules.dart';
+import 'package:studio_core/app/studio_ui.dart';
 
 import 'fill_engine.dart';
 import 'fill_rules.dart';
+
+final Map<StudioLook, ThemeData> _studioThemes = {};
 
 class FillView extends StatefulWidget {
   final PlayContext ctx;
@@ -155,8 +158,15 @@ class _FillViewState extends State<FillView> {
   Offset _feedbackShift(FillPiece p, double cell) => Offset(-p.width * cell / 2, -p.height * cell - 48);
 
   // ---- Build -----------------------------------------------------------------
+  /// Oyun içi düğmeler, çipler ve yazılar onaylı koyu tasarımda (merkezin
+  /// paleti); tahta çizimi kendi renklerini korur.
   @override
   Widget build(BuildContext context) {
+    final look = StudioLook.of(context);
+    return Theme(data: _studioThemes[look] ??= buildStudioTheme(look), child: Builder(builder: _build));
+  }
+
+  Widget _build(BuildContext context) {
     return LayoutBuilder(builder: (context, cons) {
       final boardW = (cons.maxWidth - 24).clamp(200.0, (cons.maxHeight * 0.55).clamp(200.0, 640.0));
       final cell = boardW / level.width;
