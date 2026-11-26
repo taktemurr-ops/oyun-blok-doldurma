@@ -5,19 +5,36 @@ import 'package:studio_core/core/strings.dart';
 import 'package:studio_core/app/game_api.dart';
 import 'package:studio_core/app/services/audio.dart';
 import 'package:studio_core/core/game_rules.dart';
+import 'package:studio_core/app/studio_ui.dart';
 
 import 'fill_engine.dart';
 import 'fill_rules.dart';
 
-class FillView extends StatefulWidget {
+final Map<StudioLook, ThemeData> _studioThemes = {};
+
+/// Oyun ekranı: düğmeler, çipler, üst bilgi ve pencereler onaylı koyu
+/// tasarımda (merkezin paleti, studio-core StudioLook); tahta çizimi kendi
+/// renklerini korur.
+class FillView extends StatelessWidget {
   final PlayContext ctx;
   const FillView({super.key, required this.ctx});
 
   @override
-  State<FillView> createState() => _FillViewState();
+  Widget build(BuildContext context) {
+    final look = StudioLook.of(context);
+    return Theme(data: _studioThemes[look] ??= buildStudioTheme(look), child: FillViewBody(ctx: ctx));
+  }
 }
 
-class _FillViewState extends State<FillView> {
+class FillViewBody extends StatefulWidget {
+  final PlayContext ctx;
+  const FillViewBody({super.key, required this.ctx});
+
+  @override
+  State<FillViewBody> createState() => _FillViewState();
+}
+
+class _FillViewState extends State<FillViewBody> {
   late FillLevel level;
   late FillGame game;
   final GlobalKey _boardKey = GlobalKey();
